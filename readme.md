@@ -3,8 +3,10 @@
 ## Idee
 In dem Spiel geht es darum, dass man eine Zeichnung erstellt,
 welche aus zwei Teilen besteht.
+
 1. Die Hauptzeichnung
 2. Die Kollisionszeichnung
+
 Vielleicht werden noch weitere Kategorien hinzusgefügt, doch
 hauptsächlich geht es darum, dass man in dem Spiel einen Charakter
 erstellt, mit dem man in der Lage ist von einer Zeichnung in die
@@ -15,7 +17,7 @@ Welten zu erkunden.
 - Clientside
 	1. Der Client verbindet sich mittels eines Browsers mit dem
 		Host des Spiels
-	2. Die URL wird entschlüsselt
+	2. Die URL wird [entschlüsselt](#url-entschlüsselung)
 		- Welche Skizze wird geladen
 		- Welche Attribute hat der Spieler
 		- ...
@@ -35,5 +37,30 @@ Welten zu erkunden.
 - Serverside
 	1. Erstelle Skizze (bunt) und Kollisionsdatei (schwarz-weiß)
 	2. Speichere Skizze und Kollisionsdatei als
-		"NAME.png" und "NAME-KOL.png" unter "/level"
+		"NAME-v.png", "NAME-h.png" und "NAME-k.png" unter "/level"
 	3. Erstelle einen Link für dieses Level
+
+##### URL Entschlüsselung
+
+###### Skizze
+
+| ID | Default | Bedeutung |
+|----|---------|-----------|
+| v  | Lade den Vordergrund der default Skizze | URL zum Vordergrund der Skizze |
+| h  | Lade den Hintergrund der default Skizze | URL zum Hintergrund der Skizze |
+| k  | Lade die Kollisionsdatei der default Skizze | URL zu der Kollisionsdatei |
+
+###### Spieler
+
+##### Objekte
+
+###### Level
+
+Eine Skizze stellt ein Level oder eine Zeichnung da, auf welcher sich
+ein Spieler bewegen kann.
+
+| Attribut | Eigenschaft |
+|----------|-------------|
+| Vordergrund | Das Bild, welches den Vordergrund darstellt |
+| Hintergrund | Das Bild, welches den Hintergrund darstellt |
+| kollision | Das Bild, welches die Kollisionsdatei darstellt |
