@@ -13,15 +13,15 @@ export class Player extends Entity{
 	}
 	keyboard() {
 		if( KEYBOARD.pressed('ArrowRight') )
-			this.vx = 1;
+			this.vx = 3;
 		else if( KEYBOARD.pressed('ArrowLeft') )
-			this.vx = -1;
+			this.vx = -3;
 		else
 			this.vx = 0;
 		if( KEYBOARD.pressed('ArrowUp') )
-			this.vy = -1;
+			this.vy = -3;
 		else if( KEYBOARD.pressed('ArrowDown') )
-			this.vy = 1;
+			this.vy = 3;
 		else
 			this.vy = 0;
 	}
