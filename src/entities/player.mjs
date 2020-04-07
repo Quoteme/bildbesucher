@@ -4,7 +4,7 @@ import * as KEYBOARD from '../keyboard/keyboard.mjs'
 window.KEYBOARD = KEYBOARD
 
 export class Player extends Entity{
-	constructor(url='../../res/player.png', x=0, y=0){
+	constructor(url='res/player.png', x=0, y=0){
 		super(url, x, y);
 	}
 	get sprite(){
