@@ -1,7 +1,7 @@
 body{
-	margin: 0px;
-	overflow: hidden;
+	background: #161616;
 }
 #c {
-	background: #161616
+	background: #161616;
+	border: 5px solid black;
 }

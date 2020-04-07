@@ -34,6 +34,10 @@ export class Level {
 		return this.vordergrundIMG.complete
 			&& this.hintergrundIMG.complete
 			&& this.kollisionIMG.complete
+			&& this.entities.every(e => e.loaded )
+	}
+	update() {
+		this.entities.forEach(e => e.update())
 	}
 }
 

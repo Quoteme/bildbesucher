@@ -14,16 +14,36 @@ export class Entity{
 		this.time = 0; // time the object has been active
 	}
 	get x() {
+		// x-Position of the Entity
 		return this.position.x;
 	}
 	set x(nx) {
+		// x-Position of the Entity
 		this.position.x = nx;
 	}
 	get y() {
+		// y-Position of the Entity
 		return this.position.y;
 	}
 	set y(ny) {
+		// y-Position of the Entity
 		this.position.y = ny;
+	}
+	get vx() {
+		// x-Velocity of the Entity
+		return this.velocity.x;
+	}
+	set vx(nvx) {
+		// x-Velocity of the Entity
+		this.velocity.x = nvx;
+	}
+	get vy() {
+		// x-Velocity of the Entity
+		return this.velocity.y;
+	}
+	set vy(nvy) {
+		// x-Velocity of the Entity
+		this.velocity.y = nvy;
 	}
 	get width() {
 		return this.sprite.width
@@ -43,8 +63,14 @@ export class Entity{
 	update() {
 		// Erhöhe den Zeit-Counter
 		this.time++;
+		// Prüfe nach Tastatureingaben
+		this.keyboard()
 		// Wende die Beschläunigung auf die Position an
 		this.position.x += this.velocity.x;
 		this.position.y += this.velocity.y;
+	}
+	keyboard() {
+		// führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
+		// dies muss für jeden Entity einzeln festgelegt werden
 	}
 }
