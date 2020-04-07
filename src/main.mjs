@@ -13,7 +13,7 @@ const init = _ => {
 	c.height = 350;
 	ctx = c.getContext('2d');
 	// URL entziffern
-	let skizzeURL = get()?.s ?? '../level/Landschaft';
+	let skizzeURL = get()?.s ?? 'level/Landschaft';
 	let kollisionURL = get()?.k;
 	// Spieler laden
 	spieler = new Player();
