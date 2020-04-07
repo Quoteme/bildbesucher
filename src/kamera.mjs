@@ -11,7 +11,7 @@ export class Kamera {
 		this.level  = level;  // Level, welches gerendert werden soll
 		this.target = target; // Object, welches verfolgt werden soll
 		this.follow = target!=undefined; // True, wenn das Target verfolgt werden soll
-		this.speed = 0.5;
+		this.speed = 0.025;
 	}
 	get x(){
 		return this.position.x;
