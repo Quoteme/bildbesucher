@@ -1,4 +1,9 @@
-# DoodleDetective
+# BildBesucher
+
+## Bildschirmfotos
+![Ausblick auf das Haus](./res/screenshots/1.png)
+![Startpunkt](./res/screenshots/2.png)
+![Atomarer Untergang](./res/screenshots/3.png)
 
 ## Idee
 In dem Spiel geht es darum, dass man eine Zeichnung erstellt,
