@@ -1,5 +1,9 @@
 # BildBesucher
 
+## Online Version
+Das Spiel kann auf [quoteme.github.io/bildbesucher/](https://quoteme.github.io/bildbesucher/)
+online gespielt werden.
+
 ## Bildschirmfotos
 ![Ausblick auf das Haus](./res/screenshots/1.png)
 ![Startpunkt](./res/screenshots/2.png)
@@ -7,9 +11,9 @@
 
 ## Idee
 In dem Spiel geht es darum, dass man eine Zeichnung erstellt,
-welche aus zwei Teilen besteht.
+welche aus zwei (bzw drei) Teilen besteht.
 
-1. Die Hauptzeichnung
+1. Die Hauptzeichnung (welche aus Vorder & Hintergrund besteht)
 2. Die Kollisionszeichnung
 
 Vielleicht werden noch weitere Kategorien hinzusgefügt, doch
@@ -40,7 +44,7 @@ Welten zu erkunden.
 			- Spieler-Portal : wechsle URL/Level
 		- Ändere Position des Spielers nach Geschwindigkeit
 - Serverside
-	1. Erstelle Skizze (bunt) und Kollisionsdatei (schwarz-weiß)
+	1. Erstelle Skizze (bunt/schwarz-weiß) und Kollisionsdatei (schwarz-weiß)
 	2. Speichere Skizze und Kollisionsdatei als
 		"NAME-v.png", "NAME-h.png" und "NAME-k.png" unter "/level"
 	3. Erstelle einen Link für dieses Level
