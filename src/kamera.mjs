@@ -1,5 +1,5 @@
 export class Kamera {
-	constructor(canvas, level, target, x=0, y=0, zoom=1){
+	constructor(canvas, level, target, zoom=1.5, x=0, y=0){
 		this.position = { // Position der Kamera auf dem Level
 			x : x, // momentane x-Position
 			nx: x, // soll x-Position
@@ -84,8 +84,8 @@ export class Kamera {
 				0,
 				e.width,
 				e.height,
-				e.x - this.corner.upperx - e.width/2/this.zoom,
-				e.y - this.corner.uppery - e.width/2/this.zoom,
+				(e.x - this.corner.upperx - e.width/2)/this.zoom,
+				(e.y - this.corner.uppery - e.height/2)/this.zoom,
 				e.width/this.zoom,
 				e.height/this.zoom,
 				// e.x-e.width/2 -this.offsetx,

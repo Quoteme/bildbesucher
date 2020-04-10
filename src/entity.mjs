@@ -52,6 +52,7 @@ export class Entity{
 		return this.sprite.height
 	}
 	get loaded() {
+		// Returns true, if the entity assets are loaded and is ready to be used
 		return this.spritesheet.complete;
 	}
 	get sprite() {
@@ -72,5 +73,8 @@ export class Entity{
 	keyboard() {
 		// führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
 		// dies muss für jeden Entity einzeln festgelegt werden
+	}
+	collision() {
+		// TODO
 	}
 }
