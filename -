@@ -1,0 +1,116 @@
+export class Entity{
+	constructor(URL='', x=0, y=0){
+		this.position = {
+			x : x,
+			y : y,
+		}
+		this.velocity = {
+			x : 0,
+			y : 0,
+		}
+		this.spritesheet = new Image();
+		this.spritesheet.src = URL;
+		this.active = true; // true if this entity should be animated and checked for events
+		this.time = 0; // time the object has been active
+		this.collision = undefined; // speichert alle orte, an denen die Entität momentan kollidiert
+	}
+	get x() {
+		// x-Position of the Entity
+		return this.position.x;
+	}
+	set x(nx) {
+		// x-Position of the Entity
+		this.position.x = nx;
+	}
+	get y() {
+		// y-Position of the Entity
+		return this.position.y;
+	}
+	set y(ny) {
+		// y-Position of the Entity
+		this.position.y = ny;
+	}
+	get vx() {
+		// x-Velocity of the Entity
+		return this.velocity.x;
+	}
+	set vx(nvx) {
+		// x-Velocity of the Entity
+		this.velocity.x = nvx;
+	}
+	get vy() {
+		// x-Velocity of the Entity
+		return this.velocity.y;
+	}
+	set vy(nvy) {
+		// x-Velocity of the Entity
+		this.velocity.y = nvy;
+	}
+	get width() {
+		return this.sprite.width
+	}
+	get height() {
+		return this.sprite.height
+	}
+	get corners() {
+		return {
+			topleft     : {
+				x: this.x-this.width/2,
+				y: this.y-this.height/2,
+			},
+			topright    : {
+				x: this.x+this.width/2,
+				y: this.y-this.height/2,
+			},
+			bottomright : {
+				x: this.x+this.width/2,
+				y: this.y+this.height/2,
+			},
+			bottomleft  : {
+				x: this.x-this.width/2,
+				y: this.y+this.height/2,
+			},
+		}
+	}
+	get inair() {
+		// gibt an, ob die Entität mit nichts Kollidiert
+		return Object.values(this.collision).every(e => e==false)
+	}
+	get loaded() {
+		// Returns true, if the entity assets are loaded and is ready to be used
+		return this.spritesheet.complete;
+	}
+	get sprite() {
+		// gibt den gerade spielenden Sprite wieder
+		// dies muss für jeden Entity einzeln festgelegt werden
+		console.warn('Kein benutzerdefinierter Sprite. Bitte erstelle eine eigene Spritefunktion!');
+		return this.spritesheet
+	}
+	update(level) {
+		// Erhöhe den Zeit-Counter
+		this.time++;
+		// Prüfe nach Tastatureingaben
+		this.keyboard();
+		// Berechne die Kollisionen
+		this.computeCollision(level);
+		// Wende die Beschläunigung auf die Position an
+		this.position.x += this.velocity.x;
+		this.position.y += this.velocity.y;
+		//
+		console.log(this.collision)
+	}
+	keyboard() {
+		// führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
+		// dies muss für jeden Entity einzeln festgelegt werden
+	}
+	computeCollision(level) {
+		// gibt ein Array zurück, ob an einer Kante die Entität
+		// kollidiert
+		this.collision = Object.fromEntries(Object.entries(this.corners)
+			.map(c => [
+				c[0],
+				level.checkCollision(c[1].x,c[1].y),
+			])
+		)
+	}
+}
