@@ -14,7 +14,7 @@ export class Entity{
 		this.time = 0; // time the object has been active
 		this.collision = undefined; // speichert alle orte, an denen die Entität momentan kollidiert
 		this.ds = 1;
-		this.dt = 3;
+		this.dt = 6;
 	}
 	get x() {
 		// x-Position of the Entity
@@ -80,23 +80,49 @@ export class Entity{
 		return Object.entries(this.collision).some(e =>
 			e[0].includes('dx') || e[0].includes('dy') || e[1] )
 	}
+	get collidesTop() {
+		return this.collision.topright || this.collision.topright
+	}
+	get collidesBottom() {
+		return this.collision.bottomright || this.collision.bottomright
+	}
+	get collidesLeft() {
+		return this.collision.bottomleft || this.collision.topleft
+	}
+	get collidesRight() {
+		return this.collision.bottomright || this.collision.topright
+	}
 	get jumpingAgainstCeiling(){
 		// true, wenn Entität nach oben steigt und mit dem
 		// oberen Teil gegen etwas kollidiert
-		return (this.collision.topleft || this.collision.topright) && this.vy < 0
+		return this.collidesTop && this.vy < 0
 	}
 	get fallingOnFloor() {
 		// true, wenn Entiät fällt und mit dem unteren Teil
 		// gegen etwas kollidiert
-		return (this.collision.bottomleft || this.collision.bottomright) && this.vy > 0
+		return this.collidesBottom && this.vy > 0
 	}
 	get walkingIntoLeftWall() {
 		// true, wenn Entität links gegen etwas läuft
-		return (this.collision.topleft || this.collision.bottomleft) && this.vx < 0
+		return this.collidesLeft && this.vx < 0
 	}
 	get walkingIntoRightWall() {
 		// true, wenn Entität rechts gegen etwas läuft
-		return (this.collision.topright || this.collision.bottomright) && this.vx > 0
+		return this.collidesRight && this.vx > 0
+	}
+	get walkingUpLeftSlope() {
+		// true, wenn Entität irgendwo nach rechts hochgehen möchte
+		return this.collision.bottomleft && !this.collision.dxbottomleft && this.vx < 0
+	}
+	get walkingUpRightSlope() {
+		// true, wenn Entität irgendwo nach links hochgehen möchte
+		return this.collision.bottomright && !this.collision.dxbottomright && this.vx > 0
+	}
+	get fallingDownLeftSlope() {
+		return this.collision.bottomleft && !this.collision.dybottomleft && this.vy > 0
+	}
+	get fallingDownRightSlope() {
+		return this.collision.bottomright && !this.collision.dybottomright && this.vy > 0
 	}
 	get sprite() {
 		// gibt den gerade spielenden Sprite wieder
@@ -159,7 +185,7 @@ export class Entity{
 				y: this.corners.topright.y-ds, // ↑
 			},
 			dybottomright : {
-				x: this.corners.bottomright.x+dt, // ←
+				x: this.corners.bottomright.x-dt, // ←
 				y: this.corners.bottomright.y+ds, // ↓
 			},
 			dybottomleft  : {
@@ -183,10 +209,19 @@ export class Entity{
 		this.vy += level.gravity.y;
 		// Stillstand bei kollision
 		if( this.collides ){
+			console.log(this.fallingDownLeftSlope, this.fallingDownRightSlope)
 			if( this.jumpingAgainstCeiling || this.fallingOnFloor )
-				this.vy = 0;
+				if( this.fallingDownLeftSlope || this.fallingDownRightSlope ){
+					this.vx *= 1.05
+					this.vy += 0.1
+				}else
+					this.vy = 0;
 			if( this.walkingIntoLeftWall || this.walkingIntoRightWall )
-				this.vx = 0
+				if( this.walkingUpLeftSlope || this.walkingUpRightSlope ){
+					this.vy -= 1
+					this.vx *= 0.8
+				}else
+					this.vx = 0
 		}
 		// Wende die Beschläunigung auf die Position an
 		this.x += this.vx;
