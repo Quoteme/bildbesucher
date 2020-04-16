@@ -4,3 +4,6 @@
 [submodule "src/keyboard"]
 	path = src/keyboard
 	url = https://github.com/Quoteme/keyboard.git
+[submodule "src/cutImg"]
+	path = src/cutImg
+	url = https://github.com/Quoteme/cutImg

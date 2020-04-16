@@ -10,11 +10,13 @@ export class Entity{
 		}
 		this.spritesheet = new Image();
 		this.spritesheet.src = URL;
+		this.spriteatlas = undefined; // Speichert ein Object aus Arrays aus Sprites für jeden state
+		this.state = 'idle'; // Stadium in dem sich die Entität befindet
 		this.active = true; // true if this entity should be animated and checked for events
 		this.time = 0; // time the object has been active
-		this.collision = undefined; // speichert alle orte, an denen die Entität momentan kollidiert
-		this.ds = 1;
-		this.dt = 6;
+		this.collision = undefined; // speichert alle Orte, an denen die Entität momentan kollidiert
+		this.ds = 1; // kleine Änderung der Distanz zu einer Kante der Entität
+		this.dt = 6; // veränderung der Position bei einer Änderung der Distanz um ds
 	}
 	get x() {
 		// x-Position of the Entity
@@ -77,8 +79,10 @@ export class Entity{
 	}
 	get collides() {
 		// gibt an, ob die Entität mit irgendetwas kollidiert
+		if( this.collision==undefined )
+			return true
 		return Object.entries(this.collision).some(e =>
-			e[0].includes('dx') || e[0].includes('dy') || e[1] )
+			!e[0].includes('dx') && !e[0].includes('dy') && e[1] )
 	}
 	get collidesTop() {
 		return this.collision.topright || this.collision.topright
@@ -132,7 +136,10 @@ export class Entity{
 	}
 	get loaded() {
 		// Returns true, if the entity assets are loaded and is ready to be used
-		return this.spritesheet.complete;
+		if( this.spriteatlas == undefined )
+			this.computeSpriteatlas();
+		return this.spritesheet.complete
+			&& this.spriteatlas != undefined;
 	}
 	update(level) {
 		// Erhöhe den Zeit-Counter
@@ -147,6 +154,10 @@ export class Entity{
 	keyboard() {
 		// führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
 		// dies muss für jeden Entity einzeln festgelegt werden
+	}
+	computeSpriteatlas(){
+		// muss für jede Entität selber definiert werden
+		this.spriteatlas = {};
 	}
 	computeCollision(level, ds=this.ds, dt=this.dt) {
 		// gibt ein Array zurück, ob an einer Kante die Entität
@@ -209,7 +220,13 @@ export class Entity{
 		this.vy += level.gravity.y;
 		// Stillstand bei kollision
 		if( this.collides ){
-			console.log(this.fallingDownLeftSlope, this.fallingDownRightSlope)
+			// TODO
+			// console.log(
+			// 	this.fallingDownLeftSlope?'\x1b[31m 0':'\x1B[34m X',
+			// 	this.fallingDownRightSlope?'\x1b[31m 0':'\x1B[34m X',
+			// 	this.walkingUpLeftSlope?'\x1b[31m 0':'\x1B[34m X',
+			// 	this.walkingUpRightSlope?'\x1b[31m 0':'\x1B[34m X',
+			// )
 			if( this.jumpingAgainstCeiling || this.fallingOnFloor )
 				if( this.fallingDownLeftSlope || this.fallingDownRightSlope ){
 					this.vx *= 1.05
