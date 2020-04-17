@@ -10,7 +10,7 @@ export class Level {
 		this.kollisionNeedsUpdate = true; // gibt an, ob kollisionCANVAS neu generiert werden muss
 		this.entities             = [] // Entitäten im Level (wie Spieler etc)
 		this.kollitionsgrenze     = 0.8; // alpha-Wert des Pixels, damit er als kollidierbar gilt
-		this.gravity              = {x: 0, y: +0.3}
+		this.gravity              = {x: 0, y: +0.2}
 	}
 	get vordergrund() {
 		// Gibt das Vordergrundbild zurück, wenn geladen
