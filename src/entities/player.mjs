@@ -57,8 +57,11 @@ export class Player extends Entity{
 		}else{
 			this.state = 'idle';
 		}
-		if( KEYBOARD.pressed('ArrowUp') && this.collides )
-			this.vy = -7;
+		if( KEYBOARD.pressed('ArrowUp') )
+			if( this.collides )
+				this.vy = -4;
+			else
+				this.vy -= 0.15;
 		else if( KEYBOARD.pressed('ArrowDown') )
 			this.vy = 3;
 	}
