@@ -78,19 +78,21 @@ export class Kamera {
 				this.canvas.width,
 				this.canvas.height,
 			)
-		const drawEntity = e => ctx.drawImage(
-				e.sprite,
-				0,
-				0,
-				e.width,
-				e.height,
-				(e.x - this.corner.upperx - e.width/2)/this.zoom,
-				(e.y - this.corner.uppery - e.height/2)/this.zoom,
-				e.width/this.zoom,
-				e.height/this.zoom,
-				// e.x-e.width/2 -this.offsetx,
-				// e.y-e.height/2 -this.offsety,
-			)
+		const drawEntity = e => e.sprite!=undefined
+			? ctx.drawImage(
+					e.sprite,
+					0,
+					0,
+					e.width,
+					e.height,
+					(e.x - this.corner.upperx - e.width/2)/this.zoom,
+					(e.y - this.corner.uppery - e.height/2)/this.zoom,
+					e.width/this.zoom,
+					e.height/this.zoom,
+					// e.x-e.width/2 -this.offsetx,
+					// e.y-e.height/2 -this.offsety,
+				)
+			: undefined
 		// Zeichne den Hintergrund
 		drawLayer(this.level.hintergrund);
 		// Zeichne die Objekte des Levels

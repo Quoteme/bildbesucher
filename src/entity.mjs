@@ -16,7 +16,8 @@ export class Entity{
 		this.time = 0; // time the object has been active
 		this.collision = undefined; // speichert alle Orte, an denen die Entität momentan kollidiert
 		this.ds = 1; // kleine Änderung der Distanz zu einer Kante der Entität
-		this.dt = 6; // veränderung der Position bei einer Änderung der Distanz um ds
+		this.dt = 14; // veränderung der Position bei einer Änderung der Distanz um ds
+		this.effectivleyZero = 0.04; // Grenze, ab welchem Wert eine Zahl praktisch 0 ist
 	}
 	get x() {
 		// x-Position of the Entity
@@ -36,6 +37,10 @@ export class Entity{
 	}
 	get vx() {
 		// x-Velocity of the Entity
+		//
+		// Wenn die x-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
+		if( Math.abs(this.velocity.x) < this.effectivleyZero )
+			this.velocity.x = 0;
 		return this.velocity.x;
 	}
 	set vx(nvx) {
@@ -43,11 +48,15 @@ export class Entity{
 		this.velocity.x = nvx;
 	}
 	get vy() {
-		// x-Velocity of the Entity
+		// y-Velocity of the Entity
+		//
+		// Wenn die y-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
+		if( Math.abs(this.velocity.y) < this.effectivleyZero )
+			this.velocity.y = 0;
 		return this.velocity.y;
 	}
 	set vy(nvy) {
-		// x-Velocity of the Entity
+		// y-Velocity of the Entity
 		this.velocity.y = nvy;
 	}
 	get width() {
@@ -139,7 +148,7 @@ export class Entity{
 		if( this.spriteatlas == undefined )
 			this.computeSpriteatlas();
 		return this.spritesheet.complete
-			&& this.spriteatlas != undefined;
+			&& this.spriteatlas != undefined
 	}
 	update(level) {
 		// Erhöhe den Zeit-Counter

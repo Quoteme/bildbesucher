@@ -15,9 +15,9 @@ export class Player extends Entity{
 			case 'idle':
 				return this.spriteatlas.idle[Math.floor(this.time/17%3)]
 			case 'walkRight':
-				return this.spriteatlas.walkRight[Math.floor(this.time/12.5%6)]
+				return this.spriteatlas.walkRight[Math.floor(this.time/11.5%6)]
 			case 'walkLeft':
-				return this.spriteatlas.walkLeft[Math.floor(this.time/12.5%6)]
+				return this.spriteatlas.walkLeft[Math.floor(this.time/11.5%6)]
 			default:
 				return this.spritesheet
 		}
