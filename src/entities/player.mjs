@@ -13,11 +13,11 @@ export class Player extends Entity{
 		// gibt den gerade spielenden Sprite wieder
 		switch(this.state){
 			case 'idle':
-				return this.spriteatlas.idle[Math.floor(this.time/10%3)]
+				return this.spriteatlas.idle[Math.floor(this.time/17%3)]
 			case 'walkRight':
-				return this.spriteatlas.walkRight[Math.floor(this.time/7.5%7)]
+				return this.spriteatlas.walkRight[Math.floor(this.time/12.5%6)]
 			case 'walkLeft':
-				return this.spriteatlas.walkLeft[Math.floor(this.time/7.5%7)]
+				return this.spriteatlas.walkLeft[Math.floor(this.time/12.5%6)]
 			default:
 				return this.spritesheet
 		}
@@ -35,8 +35,7 @@ export class Player extends Entity{
 				CUTIMG.cut(this.spritesheet, 56, 57, 32, 49),
 				CUTIMG.cut(this.spritesheet, 91, 56, 20, 50),
 				CUTIMG.cut(this.spritesheet, 113, 60, 29, 45),
-				CUTIMG.cut(this.spritesheet, 146, 62, 29, 44),
-				CUTIMG.cut(this.spritesheet, 174, 58, 28, 48),
+				CUTIMG.cut(this.spritesheet, 142, 57, 28, 48),
 			],
 			walkLeft: [
 				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 0, 61, 27, 46)),
@@ -44,8 +43,7 @@ export class Player extends Entity{
 				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 56, 57, 32, 49)),
 				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 91, 56, 20, 50)),
 				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 113, 60, 29, 45)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 146, 62, 29, 44)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 174, 58, 28, 48)),
+				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 142, 57, 28, 48)),
 			]
 		}
 	}
@@ -59,7 +57,6 @@ export class Player extends Entity{
 		}else{
 			this.state = 'idle';
 		}
-		console.log(this.collision, this.collides)
 		if( KEYBOARD.pressed('ArrowUp') && this.collides )
 			this.vy = -7;
 		else if( KEYBOARD.pressed('ArrowDown') )

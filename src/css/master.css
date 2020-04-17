@@ -4,4 +4,5 @@ body{
 #c {
 	background: #161616;
 	border: 5px solid black;
+	filter: sepia(20%) contrast(98%);
 }
