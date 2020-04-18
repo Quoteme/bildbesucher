@@ -5,11 +5,15 @@
 Das Spiel kann auf [quoteme.github.io/bildbesucher/](https://quoteme.github.io/bildbesucher/)
 online gespielt werden.
 
+## Documentation
+
+Die Dokumentation ist auf [quoteme.github.io/bildbesucher/docs](https://quoteme.github.io/bildbesucher/docs)
+
 ## Bildschirmfotos
 
-![Ausblick auf das Haus](./res/screenshots/1.png)
-![Startpunkt](./res/screenshots/2.png)
-![Atomarer Untergang](./res/screenshots/3.png)
+![Ausblick auf das Haus](https://i.imgur.com/4qycA29.png)
+![Startpunkt](https://i.imgur.com/edbmKDj.png)
+![Atomarer Untergang](https://i.imgur.com/4Pbw06J.png)
 
 ## Idee
 
@@ -52,29 +56,3 @@ Welten zu erkunden.
  2. Speichere Skizze und Kollisionsdatei als
   "NAME-v.png", "NAME-h.png" und "NAME-k.png" unter "/level"
  3. Erstelle einen Link für dieses Level
-
-##### URL Entschlüsselung
-
-###### Skizze
-
-| ID | Default | Bedeutung |
-|----|---------|-----------|
-| v  | Lade den Vordergrund der default Skizze | URL zum Vordergrund der Skizze |
-| h  | Lade den Hintergrund der default Skizze | URL zum Hintergrund der Skizze |
-| k  | Lade die Kollisionsdatei der default Skizze | URL zu der Kollisionsdatei |
-
-###### Spieler
-
-##### Objekte
-
-###### Level
-
-Eine Skizze stellt ein Level oder eine Zeichnung da, auf welcher sich
-ein Spieler bewegen kann.
-
-| Attribut | Eigenschaft |
-|----------|-------------|
-| Vordergrund | Das Bild, welches den Vordergrund darstellt |
-| Hintergrund | Das Bild, welches den Hintergrund darstellt |
-| kollision | Das Bild, welches die Kollisionsdatei darstellt |
-

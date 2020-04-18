@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: entity.mjs</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: entity.mjs</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @module Entity
  * @version 0.1
  * @author Luca Leon Happel
@@ -72,7 +100,7 @@ export class Entity{
 	 */
 	get vx() {
 		// Wenn die x-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
-		if( Math.abs(this.velocity.x) < this.effectivleyZero )
+		if( Math.abs(this.velocity.x) &lt; this.effectivleyZero )
 			this.velocity.x = 0;
 		return this.velocity.x;
 	}
@@ -88,7 +116,7 @@ export class Entity{
 	 */
 	get vy() {
 		// Wenn die y-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
-		if( Math.abs(this.velocity.y) < this.effectivleyZero )
+		if( Math.abs(this.velocity.y) &lt; this.effectivleyZero )
 			this.velocity.y = 0;
 		return this.velocity.y;
 	}
@@ -151,7 +179,7 @@ export class Entity{
 		if( this.collision==undefined )
 			return true
 		return Object.entries(this.collision).some(e =>
-			!e[0].includes('dx') && !e[0].includes('dy') && e[1] )
+			!e[0].includes('dx') &amp;&amp; !e[0].includes('dy') &amp;&amp; e[1] )
 	}
 	/**
 	 * Gibt an, ob die Entität oben mit Etwas Kollidiert
@@ -187,7 +215,7 @@ export class Entity{
 	 * @return {boolean} sprints gegen eine Decke
 	 */
 	get jumpingAgainstCeiling(){
-		return this.collidesTop && this.vy < 0
+		return this.collidesTop &amp;&amp; this.vy &lt; 0
 	}
 	/**
 	 * true, wenn Entiät fällt und mit dem unteren Teil
@@ -195,49 +223,49 @@ export class Entity{
 	 * @return {boolean} fällt auf den Boden
 	 */
 	get fallingOnFloor() {
-		return this.collidesBottom && this.vy > 0
+		return this.collidesBottom &amp;&amp; this.vy > 0
 	}
 	/**
 	 * Gibt an, ob Entität gegen eine linke Wand läuft
 	 * @return {boolean} true, wenn Entität links gegen eine Wand läuft
 	 */
 	get walkingIntoLeftWall() {
-		return this.collidesLeft && this.vx < 0
+		return this.collidesLeft &amp;&amp; this.vx &lt; 0
 	}
 	/**
 	 * Gibt an, ob Entität gegen eine rechte Wand läuft
 	 * @return {boolean} true, wenn Entität rechts gegen eine Wand läuft
 	 */
 	get walkingIntoRightWall() {
-		return this.collidesRight && this.vx > 0
+		return this.collidesRight &amp;&amp; this.vx > 0
 	}
 	/**
 	 * Gibt an, ob die Entität irgendwo links hochläft
 	 * @return {boolean} true, wenn Entität irgendwo nach links hochgehen möchte
 	 */
 	get walkingUpLeftSlope() {
-		return this.collision.bottomleft && !this.collision.dxbottomleft && this.vx < 0
+		return this.collision.bottomleft &amp;&amp; !this.collision.dxbottomleft &amp;&amp; this.vx &lt; 0
 	}
 	/**
 	 * Gibt an, ob die Entität irgendwo rechts hochläft
 	 * @return {boolean} true, wenn Entität irgendwo nach rechts hochgehen möchte
 	 */
 	get walkingUpRightSlope() {
-		return this.collision.bottomright && !this.collision.dxbottomright && this.vx > 0
+		return this.collision.bottomright &amp;&amp; !this.collision.dxbottomright &amp;&amp; this.vx > 0
 	}
 	/**
 	 * Gibt an, ob die Entität irgendwo links runterläuft
 	 * @return {boolean} true, wenn Entität irgendwo nach links runterläuft
 	 */
 	get fallingDownLeftSlope() {
-		return this.collision.bottomleft && !this.collision.dybottomleft && this.vy > 0
+		return this.collision.bottomleft &amp;&amp; !this.collision.dybottomleft &amp;&amp; this.vy > 0
 	}
 	/**
 	 * Gibt an, ob die Entität irgendwo rechts runterläuft
 	 * @return {boolean} true, wenn Entität irgendwo nach rechts runterläuft
 	 */
 	get fallingDownRightSlope() {
-		return this.collision.bottomright && !this.collision.dybottomright && this.vy > 0
+		return this.collision.bottomright &amp;&amp; !this.collision.dybottomright &amp;&amp; this.vy > 0
 	}
 	/**
 	 * Gibt den momentan verwendeten Sprite aus dem Spritesheet an an
@@ -259,7 +287,7 @@ export class Entity{
 		if( this.spriteatlas == undefined )
 			this.computeSpriteatlas();
 		return this.spritesheet.complete
-			&& this.spriteatlas != undefined
+			&amp;&amp; this.spriteatlas != undefined
 	}
 	/**
 	 * Updated die Entität. Dazu gehört:
@@ -381,3 +409,26 @@ export class Entity{
 		this.y += this.vy;
 	}
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Entity.html">Entity</a></li><li><a href="Kamera.html">Kamera</a></li><li><a href="Level.html">Level</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 18 2020 18:09:28 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: level.mjs</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: level.mjs</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Level
+ * @version 0.1
+ * @author Luca Leon Happel
+ * @file Speichert die Entitäten und den Hinter/Vordergrund der
+ * gemalt werden soll, sowie das Kollisionsbild
+ * @see {@link Entity}
+ */
+
+/**
+ * Klasse, welche ein Level darstellt
+ */
+export class Level {
+	/*
+	 * Erstelle ein Level
+	 * @param {string} URL - die basis-URL welche zu den Bildern des Levels gehört
+	 * @example
+	 * // läd die Dateien: [level/Landschaft-v, level/Landschaft-h.png, level/Landschaft-k.png]
+	 * l = new Level('level/Landschaft');
+	 */
+	constructor(URL) {
+		this.vordergrundIMG       = new Image();
+		this.vordergrundIMG.src   = URL.concat('-v.png');
+		this.hintergrundIMG       = new Image();
+		this.hintergrundIMG.src   = URL.concat('-h.png');
+		this.kollisionIMG         = new Image();
+		this.kollisionIMG.src     = URL.concat('-k.png');
+		this.kollisionCANVAS      = undefined; // Canvas, welches nur das kollisionIMG beinhaltet
+		this.kollisionNeedsUpdate = true; // gibt an, ob kollisionCANVAS neu generiert werden muss
+		this.entities             = [] // Entitäten im Level (wie Spieler etc)
+		this.kollitionsgrenze     = 0.8; // alpha-Wert des Pixels, damit er als kollidierbar gilt
+		this.gravity              = {x: 0, y: +0.2}
+	}
+	/**
+	 * Gibt das Vordergrundbild zurück, wenn geladen
+	 * @return {image|undefined} das Vordergrundbild, wenn geladen
+	 */
+	get vordergrund() {
+		if(this.loaded)
+			return this.vordergrundIMG;
+		else
+			console.warn('Vordergrundbild wurde noch nicht geladen!');
+	}
+	/**
+	 * Gibt das Hintergrundbild zurück, wenn geladen
+	 * @return {image|undefined} das Hintergrundbild, wenn geladen
+	 */
+	get hintergrund() {
+		if(this.loaded)
+			return this.hintergrundIMG;
+		else
+			console.warn('Hintergrundbild wurde noch nicht geladen!');
+	}
+	/**
+	 * Gibt das Kollisionsbild zurück, wenn geladen
+	 * @return {image|undefined} das Kollisionsbild, wenn geladen
+	 */
+	get kollision() {
+		if(this.loaded)
+			return this.kollisionIMG;
+		else
+			console.warn('Kollisionsbild wurde noch nicht geladen!');
+	}
+	/**
+	 * Gibt an, ob alle Dateien welche vom Level benötigt werden geladen sind
+	 * @return {boolean}
+	 */
+	get loaded(){
+		return this.vordergrundIMG.complete
+			&amp;&amp; this.hintergrundIMG.complete
+			&amp;&amp; this.kollisionIMG.complete
+			&amp;&amp; this.entities.every(e => e.loaded )
+	}
+	/**
+	 * Updated das Level
+	 * @fires Entity#update
+	 * @fires Level#computeCollisions
+	 */
+	update() {
+		this.entities.forEach(e => e.update(this))
+		if( this.kollisionNeedsUpdate )
+			this.computeCollisions();
+	}
+	/**
+	 * füllt das kollisionCANVAS mit dem kollisionIMG
+	 * damit die Pixel des kollisionIMG mit checkCollision
+	 * überprüft werden können
+	 * @return {boolean} true, wenn Kollisionen nun checkbar sind, sonst false
+	 */
+	computeCollisions() {
+		if( !this.loaded ){
+			console.warn(
+				"kollisionCANVAS konnte noch nicht erzeugt werden, \
+				da level noch nicht geladen wurde");
+			return false
+		}
+		// Füllt das kollisionCANVAS mit dem Kollisionsbild
+		let c = document.createElement("canvas");
+			c.width  = this.kollisionIMG.width;
+			c.height  = this.kollisionIMG.height;
+		let ctx = c.getContext("2d");
+			ctx.drawImage(this.kollision, 0, 0);
+		this.kollisionCANVAS = c;
+		this.kollisionNeedsUpdate = false;
+		return true
+	}
+	/**
+	 * Checkt ob ein Pixel kollidierbar ist
+	 * @param {number} x - X-Position des Pixels
+	 * @param {number} y - Y-Position des Pixels
+	 * @param {number} [r] - Rotwert den der Pixel erfüllen muss zum kollidieren
+	 * @param {number} [g] - Grünwert den der Pixel erfüllen muss zum kollidieren
+	 * @param {number} [b] - Blauwert den der Pixel erfüllen muss zum kollidieren
+	 * @param {number} [a=Level#kollisionsgrenze] - Alphawert den der Pixel erfüllen muss zum kollidieren
+	 */
+	checkCollision(x,y, r=0, b=0, g=0, a=this.kollitionsgrenze) {
+		// Gibt an, ob ein Pixel kollidierbar ist
+		if( !this.loaded )
+			return
+		if( this.kollisionCANVAS==undefined ){
+			return
+		}
+		let data = this.kollisionCANVAS
+			.getContext("2d")
+			.getImageData(x,y,1,1)
+			.data;
+		return data[0] >= r
+			&amp;&amp; data[1] >= g
+			&amp;&amp; data[2] >= b
+			&amp;&amp; data[3] >= a;
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Entity.html">Entity</a></li><li><a href="Kamera.html">Kamera</a></li><li><a href="Level.html">Level</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 18 2020 18:09:28 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
