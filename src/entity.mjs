@@ -1,4 +1,21 @@
+/**
+ * @module Entity
+ * @version 0.1
+ * @author Luca Leon Happel
+ * @file Erlaubt es neue Entitäten zu erzeugen, welche bewegt werden
+ * und kollidieren können
+ */
+
+/**
+ * Klasse, welche eine Entität darstellt
+ */
 export class Entity{
+	/**
+	 * Erstellt eine Entität
+	 * @param {string} [URL=''] - URL zu dem Spritesheet der Entität
+	 * @param {number} [x=0] - X-Position der Entität
+	 * @param {number} [y=0] - Y-Position der Entität
+	 */
 	constructor(URL='', x=0, y=0){
 		this.position = {
 			x : x,
@@ -19,54 +36,88 @@ export class Entity{
 		this.dt = 14; // veränderung der Position bei einer Änderung der Distanz um ds
 		this.effectivleyZero = 0.04; // Grenze, ab welchem Wert eine Zahl praktisch 0 ist
 	}
+	/**
+	 * Gibt die X-Position der Entität an
+	 * @return {number} X-Position
+	 */
 	get x() {
-		// x-Position of the Entity
 		return this.position.x;
 	}
+	/**
+	 * Setzt die X-Position der Entität
+	 */
 	set x(nx) {
-		// x-Position of the Entity
 		this.position.x = nx;
 	}
+	/**
+	 * Gibt die Y-Position der Entität an
+	 * @return {number} Y-Position
+	 */
 	get y() {
 		// y-Position of the Entity
 		return this.position.y;
 	}
+	/**
+	 * Setzt die Y-Position der Entität
+	 */
 	set y(ny) {
 		// y-Position of the Entity
 		this.position.y = ny;
 	}
+	/**
+	 * gibt die X-Geschwindigkeit der Entität an
+	 * @return {number} X-Geschwindigkeit
+	 */
 	get vx() {
-		// x-Velocity of the Entity
-		//
 		// Wenn die x-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
 		if( Math.abs(this.velocity.x) < this.effectivleyZero )
 			this.velocity.x = 0;
 		return this.velocity.x;
 	}
+	/**
+	 * Setzt die X-Geschwindigkeit der Entität
+	 */
 	set vx(nvx) {
-		// x-Velocity of the Entity
 		this.velocity.x = nvx;
 	}
+	/**
+	 * gibt die Y-Geschwindigkeit der Entität an
+	 * @return {number} Y-Geschwindigkeit
+	 */
 	get vy() {
-		// y-Velocity of the Entity
-		//
 		// Wenn die y-Velocity praktisch 0 ist, wird diese auf 0 gesetzt
 		if( Math.abs(this.velocity.y) < this.effectivleyZero )
 			this.velocity.y = 0;
 		return this.velocity.y;
 	}
+	/**
+	 * Setzt die Y-Geschwindigkeit der Entität
+	 */
 	set vy(nvy) {
 		// y-Velocity of the Entity
 		this.velocity.y = nvy;
 	}
+	/**
+	 * Gibt die Breite der Entität (also des gerade angezeigten Sprites) an
+	 * @see {@link Entity#sprite}
+	 */
 	get width() {
 		return this.sprite.width
 	}
+	/**
+	 * Gibt die Höhe der Entität (also des gerade angezeigten Sprites) an
+	 * @see {@link Entity#sprite}
+	 */
 	get height() {
 		return this.sprite.height
 	}
+	/**
+	 * Speichere alle Ecken einer Entität.
+	 * Also die Punkte an denen der Sprite anfängt/aufhört, wenn
+	 * man den Sprite als ein Rechteck betrachtet
+	 * @see {@link Entity#sprite}
+	 */
 	get corners() {
-		// Kanten der Entität
 		return {
 			topleft     : {
 				x: this.x-this.width/2,
@@ -86,70 +137,134 @@ export class Entity{
 			},
 		}
 	}
+	/**
+	 * Gibt an, ob die Entität mit irgendetwas kollidiert
+	 * @return {boolean} true, wenn Entität kollidiert
+	 */
 	get collides() {
-		// gibt an, ob die Entität mit irgendetwas kollidiert
 		if( this.collision==undefined )
 			return true
 		return Object.entries(this.collision).some(e =>
 			!e[0].includes('dx') && !e[0].includes('dy') && e[1] )
 	}
+	/**
+	 * Gibt an, ob die Entität oben mit Etwas Kollidiert
+	 * @return {boolean} true, wenn Entität oben gegen etwas kollidiert
+	 */
 	get collidesTop() {
 		return this.collision.topright || this.collision.topright
 	}
+	/**
+	 * Gibt an, ob die Entität unten mit Etwas Kollidiert
+	 * @return {boolean} true, wenn Entität unten gegen etwas kollidiert
+	 */
 	get collidesBottom() {
 		return this.collision.bottomright || this.collision.bottomright
 	}
+	/**
+	 * Gibt an, ob die Entität links mit Etwas Kollidiert
+	 * @return {boolean} true, wenn Entität links gegen etwas kollidiert
+	 */
 	get collidesLeft() {
 		return this.collision.bottomleft || this.collision.topleft
 	}
+	/**
+	 * Gibt an, ob die Entität rechts mit Etwas Kollidiert
+	 * @return {boolean} true, wenn Entität rechts gegen etwas kollidiert
+	 */
 	get collidesRight() {
 		return this.collision.bottomright || this.collision.topright
 	}
+	/**
+	 * true, wenn Entität nach oben steigt und mit dem
+	 * oberen Teil gegen etwas kollidiert
+	 * @return {boolean} sprints gegen eine Decke
+	 */
 	get jumpingAgainstCeiling(){
-		// true, wenn Entität nach oben steigt und mit dem
-		// oberen Teil gegen etwas kollidiert
 		return this.collidesTop && this.vy < 0
 	}
+	/**
+	 * true, wenn Entiät fällt und mit dem unteren Teil
+	 * gegen etwas kollidiert
+	 * @return {boolean} fällt auf den Boden
+	 */
 	get fallingOnFloor() {
-		// true, wenn Entiät fällt und mit dem unteren Teil
-		// gegen etwas kollidiert
 		return this.collidesBottom && this.vy > 0
 	}
+	/**
+	 * Gibt an, ob Entität gegen eine linke Wand läuft
+	 * @return {boolean} true, wenn Entität links gegen eine Wand läuft
+	 */
 	get walkingIntoLeftWall() {
-		// true, wenn Entität links gegen etwas läuft
 		return this.collidesLeft && this.vx < 0
 	}
+	/**
+	 * Gibt an, ob Entität gegen eine rechte Wand läuft
+	 * @return {boolean} true, wenn Entität rechts gegen eine Wand läuft
+	 */
 	get walkingIntoRightWall() {
-		// true, wenn Entität rechts gegen etwas läuft
 		return this.collidesRight && this.vx > 0
 	}
+	/**
+	 * Gibt an, ob die Entität irgendwo links hochläft
+	 * @return {boolean} true, wenn Entität irgendwo nach links hochgehen möchte
+	 */
 	get walkingUpLeftSlope() {
-		// true, wenn Entität irgendwo nach rechts hochgehen möchte
 		return this.collision.bottomleft && !this.collision.dxbottomleft && this.vx < 0
 	}
+	/**
+	 * Gibt an, ob die Entität irgendwo rechts hochläft
+	 * @return {boolean} true, wenn Entität irgendwo nach rechts hochgehen möchte
+	 */
 	get walkingUpRightSlope() {
-		// true, wenn Entität irgendwo nach links hochgehen möchte
 		return this.collision.bottomright && !this.collision.dxbottomright && this.vx > 0
 	}
+	/**
+	 * Gibt an, ob die Entität irgendwo links runterläuft
+	 * @return {boolean} true, wenn Entität irgendwo nach links runterläuft
+	 */
 	get fallingDownLeftSlope() {
 		return this.collision.bottomleft && !this.collision.dybottomleft && this.vy > 0
 	}
+	/**
+	 * Gibt an, ob die Entität irgendwo rechts runterläuft
+	 * @return {boolean} true, wenn Entität irgendwo nach rechts runterläuft
+	 */
 	get fallingDownRightSlope() {
 		return this.collision.bottomright && !this.collision.dybottomright && this.vy > 0
 	}
+	/**
+	 * Gibt den momentan verwendeten Sprite aus dem Spritesheet an an
+	 * @return {image} der Sprite, der gerade verwendet wird
+	 * @see {@link Entity#spritesheet}
+	 */
 	get sprite() {
 		// gibt den gerade spielenden Sprite wieder
 		// dies muss für jeden Entity einzeln festgelegt werden
 		console.warn('Kein benutzerdefinierter Sprite. Bitte erstelle eine eigene Spritefunktion!');
 		return this.spritesheet
 	}
+	/**
+	 * Gibt an, ob alle Daten für die Entität geladen wurden.
+	 * Erst dann kann die Entität auch von der Kamera gezeichnet werden
+	 * @return {boolean} true, wenn alles geladen wurde, sonst false
+	 */
 	get loaded() {
-		// Returns true, if the entity assets are loaded and is ready to be used
 		if( this.spriteatlas == undefined )
 			this.computeSpriteatlas();
 		return this.spritesheet.complete
 			&& this.spriteatlas != undefined
 	}
+	/**
+	 * Updated die Entität. Dazu gehört:
+	 * timer höhersetzen
+	 * tastatureingabe verarbeiten
+	 * Wenn schon geladen, dann auch physik und kollisionen berechnen
+	 * @param {Level} level - Das Level in dem sich die Entität befindet
+	 * @fires Entity#keyboard
+	 * @fires Entity#computeCollision
+	 * @fires Entity#physics
+	 */
 	update(level) {
 		// Erhöhe den Zeit-Counter
 		this.time++;
@@ -160,23 +275,34 @@ export class Entity{
 			this.physics(level);
 		}
 	}
+	/**
+	 * führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
+	 * dies muss für jeden Entity einzeln festgelegt werden
+	 */
 	keyboard() {
-		// führt Aktionen aus, je nachdem ob eine Taste gedrückt wurde
-		// dies muss für jeden Entity einzeln festgelegt werden
+		return
 	}
+	/**
+	 * Berechnet den Spriteatlas aus dem Spritesheet.
+	 * Also werden die Bilder im Spritesheet zurechtgeschnitten,
+	 * sodass man die Sprites einzeln verwenden kann
+	 * muss für jede Entität selber definiert werden
+	 */
 	computeSpriteatlas(){
-		// muss für jede Entität selber definiert werden
 		this.spriteatlas = {};
 	}
+	/**
+	 * Updated this.collision, sodass neue Kollisionen nachweisbar sind
+	 * Dabei wird this.corners verwendet und jeder Kante zugeordnet, ob
+	 * diese kollidiert. Zusätzich werden noch Kanten mit dx oder dy
+	 * vorne im Namen zusätzlich zu this.collision hinzugefügt, welche
+	 * die normalen Kanten nach kollisionen überprüfen, wobei diese
+	 * ein kleines bisschen verschoben wurden
+	 * @param {Level} level - das Level in dem nach Kollisionen geprüft wird
+	 * @param {number} [ds=this.ds] - die Größe, die ein kleiner Schritt ist
+	 * @param {number} [dt=this.dt] - Veränderung in Y richtung, die eine ds Änderung in X hat, bzw Veränderung in X Richtung, die eine ds Änderung in Y hat
+	 */
 	computeCollision(level, ds=this.ds, dt=this.dt) {
-		// gibt ein Array zurück, ob an einer Kante die Entität
-		// kollidiert
-		//
-		// dx/dy... (wobei ... ein Kantenname ist,
-		// 		deutet auf einen kleinen schritt in x/y Richtung)
-		// die dx/dy... kanten werden zusätzlich für jede kante zu jeder kante berechnet
-		// ds ist dabei die Größe des "kleinen Schritts" in Pixeln
-		// dt ist dabei die Änderung die dieser kleine Schritt hat
 		let dxcorners = {
 			dxtopleft     : {
 				x: this.corners.topleft.x-ds, // ←
@@ -221,24 +347,19 @@ export class Entity{
 			])
 		)
 	}
+	/**
+	 * Führt alles aus, was mit Physik zu tuen hat
+	 */
 	physics(level) {
-		// Führt alles aus, was mit Physik zu tuen hat
-		//
 		// Wende Gravitation auf Entität an
 		this.vx += level.gravity.x;
 		this.vy += level.gravity.y;
 		// Stillstand bei kollision
 		if( this.collides ){
 			// TODO
-			// console.log(
-			// 	this.fallingDownLeftSlope?'\x1b[31m 0':'\x1B[34m X',
-			// 	this.fallingDownRightSlope?'\x1b[31m 0':'\x1B[34m X',
-			// 	this.walkingUpLeftSlope?'\x1b[31m 0':'\x1B[34m X',
-			// 	this.walkingUpRightSlope?'\x1b[31m 0':'\x1B[34m X',
-			// )
 			if( this.jumpingAgainstCeiling || this.fallingOnFloor )
 				if( this.fallingDownLeftSlope || this.fallingDownRightSlope ){
-					this.vx *= 1.05
+					this.vx *= 1.01
 					this.vy += 0.1
 				}else
 					this.vy = 0;
