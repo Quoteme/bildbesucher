@@ -7,7 +7,7 @@ online gespielt werden.
 
 ## Documentation
 
-Die Dokumentation ist auf [quoteme.github.io/bildbesucher/docs](https://quoteme.github.io/bildbesucher/docs)
+Die Dokumentation ist auf [quoteme.github.io/bildbesucher/docs/](https://quoteme.github.io/bildbesucher/docs)
 
 ## Bildschirmfotos
 
