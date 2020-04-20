@@ -10,6 +10,9 @@
 
 /**
  * Klasse, welche eine virtuelle Kamera darstellt
+ * welche einen Teil eines Bildes
+ * [zoomen]{@link Kamera#zoom} können, sich glatt hin-und-her bewegen können und welche
+ * eine Entität verfolgen können
  */
 export class Kamera {
 	/**
