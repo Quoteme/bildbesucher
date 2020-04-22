@@ -244,6 +244,27 @@ export class Entity{
 	 * @return {image} der Sprite, der gerade verwendet wird
 	 * @see {@link Entity#spritesheet}
 	 */
+
+	/**
+	 * Bewegt die Entität in Richtung [x,y], bis diese auf
+	 * der Oberfläche ist
+	 * @param {number} x - X-Richtung
+	 * @param {number} y - Y-Richtung
+	 * @param {_ => boolean} [condition=_=>true] - Weitere Sachen, die erfüllt sein müssen, damit weiter zur Oberfläche gegangen wird
+	 */
+	moveToSurvace(x=0,y=1, condition=true) {
+		// move the entity up the slope, until it is in the air
+		while(this.collides && condition()){
+			this.x += x;
+			this.y += y;
+			this.computeCollision(level);
+		}
+		// undo the last movement, so the entity is on the
+		// highest point of the slope
+		this.x -= x;
+		this.y -= y;
+		this.computeCollision(level);
+	}
 	get sprite() {
 		// gibt den gerade spielenden Sprite wieder
 		// dies muss für jeden Entity einzeln festgelegt werden
@@ -362,7 +383,6 @@ export class Entity{
 		this.vy += level.gravity.y;
 		// Stillstand bei kollision
 		if( this.collides ){
-			// TODO
 			if( this.jumpingAgainstCeiling || this.fallingOnFloor )
 				if( this.fallingDownLeftSlope || this.fallingDownRightSlope ){
 					this.vx *= 1.01
@@ -371,7 +391,9 @@ export class Entity{
 					this.vy = 0;
 			if( this.walkingIntoLeftWall || this.walkingIntoRightWall )
 				if( this.walkingUpLeftSlope || this.walkingUpRightSlope ){
-					this.vy -= 1
+					this.moveToSurvace(0,-1, _=>!this.collidesTop);
+					// decrease the speed, because the entity needs
+					// to walk up
 					this.vx *= 0.8
 				}else
 					this.vx = 0

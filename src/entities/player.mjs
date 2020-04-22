@@ -22,30 +22,31 @@ export class Player extends Entity{
 				return this.spritesheet
 		}
 	}
-	computeSpriteatlas() {
+	async computeSpriteatlas() {
 		this.spriteatlas = {
 			idle: [
-				CUTIMG.cut(this.spritesheet, 7, 5, 17, 45),
-				CUTIMG.cut(this.spritesheet, 38, 5, 17, 45),
-				CUTIMG.cut(this.spritesheet, 66, 4, 17, 46),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 7, 5, 17, 45)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 38, 5, 17, 45)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 66, 4, 17, 46)),
 			],
 			walkRight: [
-				CUTIMG.cut(this.spritesheet, 0, 61, 27, 46),
-				CUTIMG.cut(this.spritesheet, 29, 61, 24, 45),
-				CUTIMG.cut(this.spritesheet, 56, 57, 32, 49),
-				CUTIMG.cut(this.spritesheet, 91, 56, 20, 50),
-				CUTIMG.cut(this.spritesheet, 113, 60, 29, 45),
-				CUTIMG.cut(this.spritesheet, 142, 57, 28, 48),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 0, 61, 27, 46)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 29, 61, 24, 45)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 56, 57, 32, 49)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 91, 56, 20, 50)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 113, 60, 29, 45)),
+				await CUTIMG.load(CUTIMG.cut(this.spritesheet, 142, 57, 28, 48)),
 			],
 			walkLeft: [
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 0, 61, 27, 46)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 29, 61, 24, 45)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 56, 57, 32, 49)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 91, 56, 20, 50)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 113, 60, 29, 45)),
-				CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 142, 57, 28, 48)),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 0, 61, 27, 46))),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 29, 61, 24, 45))),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 56, 57, 32, 49))),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 91, 56, 20, 50))),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 113, 60, 29, 45))),
+				await CUTIMG.load(CUTIMG.mirror(CUTIMG.cut(this.spritesheet, 142, 57, 28, 48))),
 			]
 		}
+		console.log(this.spriteatlas)
 	}
 	keyboard() {
 		if( KEYBOARD.pressed('ArrowRight') ){
