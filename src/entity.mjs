@@ -14,11 +14,17 @@
 export class Entity{
 	/**
 	 * Erstellt eine Entität
-	 * @param {string} [URL=''] - URL zu dem Spritesheet der Entität
+	 *
+	 * @param {string} [sprite=''] - URL zu dem Spritesheet der Entität
+	 * @param {string} [audio=[]] - Liste von URLs zu den Audioeffekten
 	 * @param {number} [x=0] - X-Position der Entität
 	 * @param {number} [y=0] - Y-Position der Entität
+	 *
+	 * @property {Image} sprite - Der momentane Sprite des Entity
+	 * @property {Image} audio - Die momentan spielende Audiodatei
+	 * @property {string} state - Der Status der Entität
 	 */
-	constructor(URL='', x=0, y=0){
+	constructor(sprite='', audio=[], x=0, y=0){
 		this.position = {
 			x : x,
 			y : y,
@@ -28,8 +34,10 @@ export class Entity{
 			y : 0,
 		}
 		this.spritesheet = new Image();
-		this.spritesheet.src = URL;
+		this.spritesheet.src = sprite // url zum Spritesheet;
 		this.spriteatlas = undefined; // Speichert ein Object aus Arrays aus Sprites für jeden state
+		this.audiosheet = audio;
+		this.audioatlas = undefined; // Speichert ein Objekt aus Arrays aus Audiodateien für jeden state
 		this.state = 'idle'; // Stadium in dem sich die Entität befindet
 		this.active = true; // true if this entity should be animated and checked for events
 		this.time = 0; // time the object has been active
@@ -246,13 +254,18 @@ export class Entity{
 	 */
 
 	/**
+	 * Weitere Bedingungen, die erfüllt sein müssen
+	 * @callback condition
+	 * @returns {boolean}
+	 */
+	/**
 	 * Bewegt die Entität in Richtung [x,y], bis diese auf
 	 * der Oberfläche ist
-	 * @param {number} x - X-Richtung
-	 * @param {number} y - Y-Richtung
-	 * @param {_ => boolean} [condition=_=>true] - Weitere Sachen, die erfüllt sein müssen, damit weiter zur Oberfläche gegangen wird
+	 * @param {number} [x=0] - X-Richtung
+	 * @param {number} [y=1] - Y-Richtung
+	 * @param {condition} [condition=_=>true] - Weitere Sachen, die erfüllt sein müssen, damit weiter zur Oberfläche gegangen wird
 	 */
-	moveToSurvace(x=0,y=1, condition=true) {
+	moveToSurvace(x=0,y=1, condition=_=>true) {
 		// move the entity up the slope, until it is in the air
 		while(this.collides && condition()){
 			this.x += x;
@@ -265,12 +278,19 @@ export class Entity{
 		this.y -= y;
 		this.computeCollision(level);
 	}
+	/**
+	 * gibt den gerade spielenden Sprite wieder
+	 * dies muss für jeden Entity einzeln festgelegt werden
+	 */
 	get sprite() {
-		// gibt den gerade spielenden Sprite wieder
-		// dies muss für jeden Entity einzeln festgelegt werden
 		console.warn('Kein benutzerdefinierter Sprite. Bitte erstelle eine eigene Spritefunktion!');
 		return this.spritesheet
 	}
+	/**
+	 * Gibt die gerade spielenden Audiodatei wieder
+	 * dies muss für jeden Entity einzeln festgelegt werden
+	 */
+	get audio() {}
 	/**
 	 * Gibt an, ob alle Daten für die Entität geladen wurden.
 	 * Erst dann kann die Entität auch von der Kamera gezeichnet werden
@@ -279,8 +299,11 @@ export class Entity{
 	get loaded() {
 		if( this.spriteatlas == undefined )
 			this.computeSpriteatlas();
+		if( this.audioatlas == undefined )
+			this.computeAudioatlas();
 		return this.spritesheet.complete
 			&& this.spriteatlas != undefined
+			&& this.audioatlas != undefined
 	}
 	/**
 	 * Updated die Entität. Dazu gehört:
@@ -297,6 +320,7 @@ export class Entity{
 		this.time++;
 		// Prüfe nach Tastatureingaben
 		this.keyboard();
+		this.audio.play()
 		if( level.loaded ){
 			this.computeCollision(level);
 			this.physics(level);
@@ -317,6 +341,19 @@ export class Entity{
 	 */
 	computeSpriteatlas(){
 		this.spriteatlas = {};
+	}
+	/**
+	 * Berechnet den Audioatlas aus dem Audiosheet.
+	 * Der Audiosheet ist der Parameter "audio" des Generators dieses
+	 * Objektes.
+	 * Mittels dieser Methode wird jedem State ein Array aus
+	 * Audiodateien zugeordnet, welche mittels der URLs vom
+	 * Audioarray geladen werden.
+	 * Diese URLs werden hier in Audiodateien Umgewandelt und in
+	 * this.audioatlas gespeichert.
+	 */
+	computeAudioatlas(){
+		this.audioatlas = {}
 	}
 	/**
 	 * Updated this.collision, sodass neue Kollisionen nachweisbar sind

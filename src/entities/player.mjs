@@ -5,9 +5,33 @@ import * as KEYBOARD from '../keyboard/keyboard.mjs'
 window.KEYBOARD = KEYBOARD
 window.CUTIMG = CUTIMG
 
+/**
+ * Klasse, welche einen Spieler darstellt
+ */
 export class Player extends Entity{
-	constructor(url='res/player.png', x=0, y=0){
-		super(url, x, y);
+	/**
+	 * Erstellt einen Player
+	 * @param {string} [sprite='res/player.png'] - URL zu dem Spritesheet des Players
+	 * @param {Object[]} [audio=[]] - Liste von URLs zu den Audioeffekten
+	 * @param {string} audio[].0 - Schritt 1
+	 * @param {string} audio[].1 - Schritt 2
+	 * @param {string} audio[].2 - Absprung
+	 * @param {string} audio[].3 - Landung
+	 * @param {number} [x=0] - X-Position des Players
+	 * @param {number} [y=0] - Y-Position des Players
+	 * @property {('idle'|'walkRight'|'walkLeft')} state - Der Status des Players
+	 */
+	constructor(
+			sprite='res/player.png',
+			audio=[
+				'res/sound/fx/footstep04.ogg',
+				'res/sound/fx/footstep05.ogg',
+				'res/sound/fx/footstep08.ogg',
+				'res/sound/fx/footstep09.ogg',
+			],
+			x=0,
+			y=0){
+		super(sprite, audio, x, y);
 	}
 	get sprite(){
 		// gibt den gerade spielenden Sprite wieder
@@ -15,11 +39,21 @@ export class Player extends Entity{
 			case 'idle':
 				return this.spriteatlas.idle[Math.floor(this.time/17%3)]
 			case 'walkRight':
-				return this.spriteatlas.walkRight[Math.floor(this.time/11.5%6)]
+				return this.spriteatlas.walkRight[Math.floor(this.time/5.75%6)]
 			case 'walkLeft':
-				return this.spriteatlas.walkLeft[Math.floor(this.time/11.5%6)]
+				return this.spriteatlas.walkLeft[Math.floor(this.time/5.75%6)]
 			default:
 				return this.spritesheet
+		}
+	}
+	get audio(){
+		switch(this.state){
+			case 'walkRight':
+				return this.audioatlas.walkRight[Math.floor(this.time/11%2)]
+			case 'walkLeft':
+				return this.audioatlas.walkLeft[Math.floor(this.time/11%2)]
+			default:
+				return new Audio();
 		}
 	}
 	async computeSpriteatlas() {
@@ -47,6 +81,18 @@ export class Player extends Entity{
 			]
 		}
 		console.log(this.spriteatlas)
+	}
+	computeAudioatlas() {
+		this.audioatlas = {
+			walkRight: [
+				new Audio(this.audiosheet[0]),
+				new Audio(this.audiosheet[1]),
+			],
+			walkLeft: [
+				new Audio(this.audiosheet[0]),
+				new Audio(this.audiosheet[1]),
+			],
+		}
 	}
 	keyboard() {
 		if( KEYBOARD.pressed('ArrowRight') ){

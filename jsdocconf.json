@@ -1,6 +1,6 @@
 {
     "source": {
-        "include": ["./readme.md", "./src"],
+        "include": ["./readme.md", "./src", "./src/entities"],
         "exclude": [],
         "includePattern": ".+\\.(js(doc|x)?|mjs)$",
         "excludePattern": "(^|\\/|\\\\)_"

@@ -26,7 +26,7 @@ const init = _ => {
 	let skizzeURL = get()?.s ?? 'level/Landschaft';
 	let kollisionURL = get()?.k;
 	// Spieler laden
-	spieler = new Player(undefined, 3000, 2850);
+	spieler = new Player(undefined, undefined, 3000, 0);
 	// Level als "level" laden
 	level = new Level(skizzeURL, kollisionURL);
 	level.entities.push(spieler);
