@@ -1,8 +1,20 @@
 body{
 	background: #161616;
 }
-#c {
-	background: #161616;
-	border: 5px solid black;
+#game {
+	position: relative;
+}
+#game #fg {
+	z-index: 1;
 	filter: sepia(20%) contrast(98%);
+}
+#game #bg {
+	z-index: 0;
+	background: #161616;
+}
+#game canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 5px solid black;
 }

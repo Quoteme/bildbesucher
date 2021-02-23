@@ -11,20 +11,21 @@
 /**
  * Klasse, welche eine virtuelle Kamera darstellt
  * welche einen Teil eines Bildes
- * [zoomen]{@link Kamera#zoom} können, sich glatt hin-und-her bewegen können und welche
- * eine Entität verfolgen können
+ * [zoomen]{@link Kamera#zoom} kann, sich glatt hin-und-her bewegen
+ * kann und welche eine Entität verfolgen können
  */
 export class Kamera {
 	/**
 	 * Erstellt eine neue Kamera
-	 * @param {object} canvas - Das Canvaselement, zu dem geredert wird
+	 * @param {object} foreground - Das Canvaselement, zu dem der Vordergrund geredert wird
+	 * @param {object} background - Das Canvaselement, zu dem der Hintergrund geredert wird
 	 * @param {Level} level - Das Level, welches gezeichnet wird
 	 * @param {Entity} target - Die Entität, welche verfolgt wird
 	 * @param {number} [zoom=1.5] - Der zoom, mit dem die Kamera rendert. Große Werte -> Mehr Sichtfeld
 	 * @param {number} [x=0] - X-Position der Kamera
 	 * @param {number} [y=0] - Y-Position der Kamera
 	 */
-	constructor(canvas, level, target, zoom=1.5, x=0, y=0){
+	constructor(foreground, background, level, target, zoom=1.5, x=0, y=0){
 		this.position = { // Position der Kamera auf dem Level
 			x : x, // momentane x-Position
 			nx: x, // soll x-Position
@@ -32,11 +33,14 @@ export class Kamera {
 			ny: y, // soll y-Position
 		}
 		this.zoom = zoom; // Zoom der Kamera / Wie viel angezeigt wird
-		this.canvas = canvas; // Das canvas, auf welches gerendert wird
+		this.foreground = foreground; // Das canvas, auf welches der Vordergrund gerendert wird
+		this.background = background; // Das canvas, auf welches der Hintergrund gerendert wird
 		this.level  = level;  // Level, welches gerendert werden soll
 		this.target = target; // Object, welches verfolgt werden soll
 		this.follow = target!=undefined; // True, wenn das Target verfolgt werden soll
 		this.speed = 0.025;
+		// Teste, ob die Kamera korrekt konstruiert wurde
+		// validate();
 	}
 	/**
 	 * Gibt die X-Position der Kamera an
@@ -70,10 +74,10 @@ export class Kamera {
 	 */
 	get corner() {
 		return {
-			upperx: this.x - this.zoom*this.canvas.width/2,
-			uppery: this.y - this.zoom*this.canvas.height/2,
-			lowerx: this.x + this.zoom*this.canvas.width/2,
-			lowery: this.y + this.zoom*this.canvas.height/2,
+			upperx: this.x - this.zoom*this.foreground.width/2,
+			uppery: this.y - this.zoom*this.foreground.height/2,
+			lowerx: this.x + this.zoom*this.foreground.width/2,
+			lowery: this.y + this.zoom*this.foreground.height/2,
 		}
 	}
 	/**
@@ -96,6 +100,18 @@ export class Kamera {
 			this.position.nx-this.position.x,
 			this.position.ny-this.position.y,
 		);
+	}
+	/**
+	 * Gibt an, ob die Parameter zum erzeugen der Kamera valide sind,
+	 * also ob:
+	 *   1. foreground und background die selben .width und .height habne
+	 */
+	validate() {
+		if ( this.foreground.width  != this.background.width ||
+		     this.foreground.height != this.foreground.width ) {
+				throw "KameraError: Vordergrund und Hintergrund sind nicht gleich groß";
+		} else
+			return true
 	}
 	/**
 	 * Updated die Kamera
@@ -121,10 +137,10 @@ export class Kamera {
 			console.warn(`Level wurde noch nicht geladen.\nRendern wird abgebrochen.`);
 			return
 		}
-		// Variables
-		let ctx = this.canvas.getContext('2d');
 		// Functions
-		const drawLayer = layer => ctx.drawImage(
+		const drawLayer = (layer,canvas) => canvas
+			.getContext('2d')
+			.drawImage(
 				layer,                              // Bild
 				this.corner.upperx,  // x-pos Ausschnitt
 				this.corner.uppery, // y-pos Ausschnitt
@@ -132,11 +148,11 @@ export class Kamera {
 				this.corner.lowery - this.corner.uppery,
 				0,
 				0,
-				this.canvas.width,
-				this.canvas.height,
+				canvas.width,
+				canvas.height,
 			)
-		const drawEntity = e => e.sprite!=undefined
-			? ctx.drawImage(
+		const drawEntity = (e,canvas) => e.sprite!=undefined
+			? canvas.getContext('2d').drawImage(
 					e.sprite,
 					0,
 					0,
@@ -151,10 +167,10 @@ export class Kamera {
 				)
 			: undefined
 		// Zeichne den Hintergrund
-		drawLayer(this.level.hintergrund);
+		drawLayer(this.level.hintergrund, this.background);
 		// Zeichne die Objekte des Levels
-		this.level.entities.forEach( e => drawEntity(e));
+		this.level.entities.forEach( e => drawEntity(e,this.foreground));
 		// Zeichne den Vordergrund
-		drawLayer(this.level.vordergrund);
+		drawLayer(this.level.vordergrund, this.foreground);
 	}
 }
